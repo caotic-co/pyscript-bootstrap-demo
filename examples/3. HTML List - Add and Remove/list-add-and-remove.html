@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>HTML List - Add and Remove</title>
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</head>
+<body>
+  <div class="m-3">
+    <div>
+      <!-- Input Field -->
+      <label class="form-label">List item</label>
+      <input type="text" class="form-control" id="itemInput">
+      <div class="form-text">Write the item to add to the list</div>
+
+      <!-- Button -->
+      <button id="submitButton" class="btn btn-primary m-1" pys-onClick="add_item">Add</button>
+    </div>
+
+    <hr>
+
+    <!-- List of Elements -->
+    <div>
+      <ul class="list-group" id="listOfItems">
+      </ul>
+    </div>
+  </div>
+</body>
+
+<!-- Python Code, Note: Do not change the indentation -->
+<py-script>
+from js import document
+ 
+    
+def add_item(event=None):
+  """
+    Function executed when the Add button is pressed,
+    Note: the 'event' paramater is required for functions
+    that are called from the HTML.
+  """
+
+  # get the item from the input text
+  itemText = Element("itemInput").element
+  if not itemText.value:
+    return
+
+  list_of_items = Element("listOfItems").element
+
+  # Create new List item with a close icon with id
+  element_number = list_of_items.childElementCount
+  new_element = document.createElement("li")
+  new_element.className += "list-group-item d-flex justify-content-between align-items-start"
+  text = document.createTextNode(itemText.value)
+  button = document.createElement("button")
+  button.className += "btn-close"
+  button.id = "delete_button_" + str(element_number)
+  new_element.appendChild(text)
+  new_element.appendChild(button)
+
+  # Add the new list item
+  list_of_items.appendChild(new_element)
+
+  # Clear input Value
+  itemText.value = ""
+  
+  # Create Delete Function
+  def delete_item(event=None):
+    """Function executed when the delete button is pressed for an item"""
+    element_to_delete = new_element
+    list_of_items.removeChild(element_to_delete)
+
+  delete_button = Element("delete_button_" + str(element_number)).element
+  delete_button.onclick = delete_item
+
+
+</py-script>    
+</html>
